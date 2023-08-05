@@ -1,15 +1,22 @@
 <script setup>
 import { reactive } from 'vue';
-
+import Cabecalho from './components/Cabecalho.vue'
+import Formulario from './components/Formulario.vue'
+import Resultado from './components/Resultado.vue'
 
   const estado = reactive({
-    primeiroNumero: 1,
-    segundoNumero: 3,
-    operacao: 'somar'
+    primeiroNumero: 0,
+    segundoNumero: 0,
+    operador: 'somar',
   })
 
   const somar = () => {
-    return estado.primeiroNumero + estado.segundoNumero
+    const result = parseInt(estado.primeiroNumero) + parseInt(estado.segundoNumero);
+    const isValid = Number.isInteger(result);//Resolver NaN
+
+    const retSoma = isValid ? result : 0;
+
+    return retSoma
   }
 
   const subtracao = () => {
@@ -21,7 +28,12 @@ import { reactive } from 'vue';
   }
 
   const divisao = () => {
-    return estado.primeiroNumero / estado.segundoNumero
+    const result = estado.primeiroNumero / estado.segundoNumero
+    const isValid = Number.isFinite(result);//Resolver Infinity
+
+    const retDivid = isValid ? result : 0;
+
+    return retDivid
   }
 
   const operacao = () => {
@@ -40,43 +52,18 @@ import { reactive } from 'vue';
 
 <template>
   <div class="container">
-    <header class="p-5 mb-4 mt-4 bg-light rounded-3">
-      <h1>Calculadora Aritmética - VueJS</h1>
-    </header>
-
-    <form @submit.prevent="">
-      <div class="row">
-        <div class="col">
-          <input
-            :value="estado.primeiroNumero"
-            type="number"
-            placeholder="digite o numero"
-            class="form-control"
-          />
-        </div>
-        <div class="col">
-          <input
-            :value="estado.segundoNumero"
-            type="number"
-            placeholder="digite o numero"
-            class="form-control"
-          />
-        </div>
-        <div class="col">
-          <select class="form-select">
-            <option value="somar">+ Adição</option>
-            <option value="subtrair">- Subtração</option>
-            <option value="multiplicar">x Multiplicação</option>
-            <option value="dividir">% Divisão</option>
-          </select>
-        </div>
-      </div>
-    </form>
-    <div class="alert alert-light mt-3" role="alert">
-      Resultado: {{ somar() }}
-    </div>
-    {{ operacao() }}
+    <Cabecalho />
+    <Formulario
+      :numero1="evento => estado.primeiroNumero = evento.target.value"
+      :numero2="evento => estado.segundoNumero = evento.target.value"
+      :operador="evento => estado.operador = evento.target.value"
+    />
+    <Resultado
+      :operador="estado.operador"
+      :somar="somar()"
+      :subtrair="subtracao()"
+      :multiplicar="multiplicacao()"
+      :dividir="divisao()"
+    />
   </div>
 </template>
-
-<style scoped></style>
