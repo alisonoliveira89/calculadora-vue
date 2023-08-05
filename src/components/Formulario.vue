@@ -27,7 +27,7 @@ const props = defineProps(['numero1','numero2','operador']);
           <option value="somar">+ Adição</option>
           <option value="subtrair">- Subtração</option>
           <option value="multiplicar">x Multiplicação</option>
-          <option value="dividir">% Divisão</option>
+          <option value="dividir">÷ Divisão</option>
         </select>
       </div>
     </div>
